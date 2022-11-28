@@ -4,10 +4,11 @@ data "aws_region" "current" {}
 module "secure_baseline" {
   source = "nozaq/secure-baseline/aws"
 
-  audit_log_bucket_name           = "YOUR_BUCKET_NAME"
+  audit_log_bucket_name           = var.audit_log_bucket_name
   aws_account_id                  = data.aws_caller_identity.current.account_id
   region                          = data.aws_region.current.name
-  support_iam_role_principal_arns = ["YOUR_IAM_USER"]
+  support_iam_role_principal_arns = var.support_iam_role_principal_arns
+  account_type                    = var.account_type
 
   providers = {
     aws                = aws
@@ -29,4 +30,10 @@ module "secure_baseline" {
     aws.us-west-1      = aws.us-west-1
     aws.us-west-2      = aws.us-west-2
   }
+
+  alarm_baseline_enabled      = false
+  analyzer_baseline_enabled   = false
+  cloudtrail_baseline_enabled = false
+  config_baseline_enabled     = false
+  iam_baseline_enabled        = false
 }
